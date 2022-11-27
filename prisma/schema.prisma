@@ -5,6 +5,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator prismaClassGenerator {
+  dryRun     = false
+  provider   = "prisma-class-generator"
+  output     = "./generated-models"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
