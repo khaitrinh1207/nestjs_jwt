@@ -1,25 +1,30 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserRequestDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(user: CreateUserRequestDto) {
+  async getAll() {
     try {
-      const new_user = await this.prisma.user.create({
-        data: user,
+      const users = await this.prisma.user.findMany({
+        where: {
+          deletedAt: null,
+        },
+        select: {
+          id: true,
+          email: true,
+          address: true,
+          age: true,
+          name: true,
+        },
       });
       return {
-        status: HttpStatus.CREATED,
-        data: {
-          id: new_user.id,
-          email: new_user.email,
-        },
+        code: HttpStatus.OK,
+        data: users,
       };
-    } catch (error) {
-      console.log(`err:::${error}`);
+    } catch (err) {
+      console.log(`error:::${err.message}`);
     }
   }
 }

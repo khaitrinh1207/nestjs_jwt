@@ -1,26 +1,31 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
   ApiBadRequestResponse,
-  ApiBody,
-  ApiCreatedResponse,
+  ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { CreateUserRequestDto } from './dto/user.dto';
+import { GetUsersResponseDto } from './dto/user.dto';
 
-@Controller('user')
-@ApiTags('User')
+@Controller('users')
+@ApiTags('Users')
 export class UserController {
   constructor(private service: UserService) {}
 
-  @ApiBody({
-    type: CreateUserRequestDto,
-    description: 'create user',
+  @ApiOkResponse({
+    isArray: true,
+    type: GetUsersResponseDto,
+    description: 'Success',
   })
-  @ApiCreatedResponse()
-  @ApiBadRequestResponse()
-  @Post()
-  async createUser(@Body() user: CreateUserRequestDto) {
-    return await this.service.createUser(user);
+  @ApiBadRequestResponse({
+    description: 'Bad request',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized',
+  })
+  @Get()
+  getAll() {
+    return this.service.getAll();
   }
 }
