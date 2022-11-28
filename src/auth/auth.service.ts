@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { LoginRequestDto, RegisterUserDto } from './dto/auth.dto';
+import { RegisterUserDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -28,32 +28,10 @@ export class AuthService {
     }
   }
 
-  async login(data: LoginRequestDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: data.email,
-      },
-    });
-    if (!user) {
-      throw new HttpException(
-        {
-          message: 'User does not exist',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    const check = await bcrypt.compare(data.password, user.password);
-
-    if (!check) {
-      throw new HttpException(
-        {
-          message: 'password is incorrect',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    return user;
-  }
+  // async login(data: LoginRequestDto) {
+  // const user = await this.validateUser(user, user.password);
+  // return user;
+  // }
 
   logOut() {
     return null;
@@ -70,5 +48,32 @@ export class AuthService {
     } catch (e) {
       return false;
     }
+  }
+
+  async validateUser(email: string, password: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+    if (!user) {
+      throw new HttpException(
+        {
+          message: 'User does not exist',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const check = await bcrypt.compare(password, user.password);
+
+    if (!check) {
+      throw new HttpException(
+        {
+          message: 'password is incorrect',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return user;
   }
 }

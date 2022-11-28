@@ -5,10 +5,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator prismaClassGenerator {
-  dryRun     = false
-  provider   = "prisma-class-generator"
+generator nestjs_dto_generator {
+  provider      = "prisma-nestjs-dto-generator"
   output     = "./generated-models"
+  enableSwagger = true
+  toLowerCase   = true
 }
 
 datasource db {

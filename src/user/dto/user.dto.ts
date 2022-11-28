@@ -1,7 +1,7 @@
 import { PickType } from '@nestjs/swagger';
-import { User } from 'prisma/generated-models/user';
+import { UserDto } from '../../../prisma/generated-models/dtos';
 
-export class GetUsersResponseDto extends PickType(User, [
+export class GetUsersResponseDto extends PickType(UserDto, [
   'id',
   'email',
   'name',

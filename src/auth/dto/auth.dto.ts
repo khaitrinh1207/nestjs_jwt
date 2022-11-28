@@ -1,7 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { User } from '../../../prisma/generated-models/user';
+import { UserDto } from '../../../prisma/generated-models/dtos';
 
-export class RegisterUserDto extends PickType(User, [
+export class RegisterUserDto extends PickType(UserDto, [
   'email',
   'age',
   'address',

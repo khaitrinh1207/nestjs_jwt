@@ -4,6 +4,8 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -13,9 +15,10 @@ import {
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginRequestDto, RegisterUserDto } from './dto/auth.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
-@ApiTags('Authen')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 
@@ -51,8 +54,11 @@ export class AuthController {
   @ApiBadRequestResponse({
     description: 'bad request',
   })
+  @UseGuards(AuthGuard('local'))
   @Post('login')
-  login(@Body() user: LoginRequestDto) {
-    return this.service.login(user);
+  login(@Req() user: LoginRequestDto) {
+    console.log(user);
+    // return this.service.login(user);
+    return user;
   }
 }
