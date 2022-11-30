@@ -1,21 +1,8 @@
-import {
-  Body,
-  Controller,
-  HttpException,
-  HttpStatus,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiBody,
-  ApiCreatedResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { AuthService } from './auth.service';
-import { LoginRequestDto, RegisterUserDto } from './dto/auth.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, HttpException, HttpStatus, Post, Session, UseGuards } from "@nestjs/common";
+import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { AuthService } from "./auth.service";
+import { LoginRequestDto, RegisterUserDto } from "./dto/auth.dto";
+import { LocalAuthGuard } from "./guard/localAuthGuard.guard";
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -54,11 +41,11 @@ export class AuthController {
   @ApiBadRequestResponse({
     description: 'bad request',
   })
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Req() user: LoginRequestDto) {
-    console.log(user);
-    // return this.service.login(user);
+  login(@Body() user: LoginRequestDto, @Session() session) {
+    console.log(session);
+    delete user.password;
     return user;
   }
 }

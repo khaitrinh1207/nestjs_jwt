@@ -1,17 +1,12 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { UserService } from './user.service';
-import {
-  ApiBadRequestResponse,
-  ApiOkResponse,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
-import { GetUsersResponseDto } from './dto/user.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, UseGuards } from "@nestjs/common";
+import { UserService } from "./user.service";
+import { ApiBadRequestResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { GetUsersResponseDto } from "./dto/user.dto";
+import { AuthenticatedGuard } from "../auth/guard/authenticated.guard";
 
 @Controller('users')
 @ApiTags('Users')
-@UseGuards(AuthGuard('local'))
+@UseGuards(AuthenticatedGuard)
 export class UserController {
   constructor(private service: UserService) {}
 
