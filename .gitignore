@@ -1,6 +1,10 @@
+*
+!.gitignore
+
 # compiled output
 /dist
 /node_modules
+
 
 # Logs
 logs
@@ -36,4 +40,4 @@ lerna-debug.log*
 
 package-lock.json
 
-!.gitignore
+
